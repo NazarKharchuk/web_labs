@@ -1,4 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-
+npm run lint --workspace=laba_2
+npm run format --workspace=laba_2
+npm run slint --workspace=laba_2
