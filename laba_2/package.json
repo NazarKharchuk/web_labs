@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint . --ignore-path .gitignore",
-    "lint:fix": "eslint . -fix --ignore-path .gitignore",
+    "lint": "eslint . --no-error-on-unmatched-pattern --ignore-path .gitignore",
+    "lint:fix": "eslint . --no-error-on-unmatched-pattern -fix --ignore-path .gitignore",
     "format:fix": "prettier --write . --ignore-path .gitignore",
     "format": "prettier --check . --ignore-path .gitignore",
-    "slint": "stylelint \"**/*.css\" --ignore-path .gitignore",
-    "slint:fix": "stylelint \"**/*.css\" --fix --ignore-path .gitignore"
+    "slint": "stylelint \"**/*.css\" --ignore-path .gitignore --aei",
+    "slint:fix": "stylelint \"**/*.css\" --fix --ignore-path .gitignore --aei"
   },
   "author": "",
   "license": "ISC",
