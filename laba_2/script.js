@@ -7,10 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
   async function Send(e) {
     e.preventDefault();
 
-    //let error = 
+    //let error =
     Validator();
-
-
   }
 });
 
