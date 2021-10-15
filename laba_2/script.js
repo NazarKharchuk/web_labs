@@ -7,13 +7,17 @@ document.addEventListener("DOMContentLoaded", function () {
   async function Send(e) {
     e.preventDefault();
 
-    //let error =
-    Validator();
+    let error = Validator();
+    if (error === 0) {
+      alert("Виділені дані введено корктно");
+    } else {
+      alert("Виділені дані введено не корктно");
+    }
   }
 });
 
 function Validator() {
-  //let error = 0;
+  let error = 0;
   let req = document.querySelectorAll("._req");
   for (let index = 0; index < req.length; index++) {
     const input = req[index];
@@ -21,13 +25,14 @@ function Validator() {
     if (input.classList.contains("_gmail")) {
       if (ValidGmail(input)) {
         AddError(input);
-        //error++;
+        error++;
       }
     } else if (input.value == "") {
       AddError(input);
-      //error++;
+      error++;
     }
   }
+  return error;
 }
 
 function AddError(input) {
