@@ -2,12 +2,15 @@
 	let formData;
 	let MesError = 0;
 	let MailError = 0;
+	let Sending = 0;
 	function checkValidate() {
 		MesError = 0;
 		MailError = 0;
+		Sending = 0;
 
 		let error = Validator();
 		if (error === 0) {
+			Sending = 1;
 			const ToSend = {
 				FMessage: formData.messege.value,
 				FMail: formData.Email.value
@@ -25,11 +28,12 @@
 						alert('Mail sent!');
 						console.log(resp);
 					}
+					formData.reset();
+					Sending = 0;
 					return resp.json();
 				})
 				.then((data) => {
 					console.log(data);
-					alert(data.cod);
 				})
 				.catch((e) => alert(e));
 		}
@@ -40,30 +44,18 @@
 		let req = document.querySelectorAll('._req');
 		for (let index = 0; index < req.length; index++) {
 			const input = req[index];
-			RemoveError(input);
 			if (input.classList.contains('_gmail')) {
 				if (ValidGmail(input)) {
-					AddError(input);
 					error++;
 					MailError = 1;
 				}
 			} else if (input.value == '') {
-				AddError(input);
 				error++;
 				MesError = 1;
 			}
 		}
 		return error;
 	}
-
-	function AddError(input) {
-		input.classList.add('_error');
-	}
-
-	function RemoveError(input) {
-		input.classList.remove('_error');
-	}
-
 	function ValidGmail(input) {
 		return !/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,8})+$/.test(input.value);
 	}
@@ -74,6 +66,9 @@
 </svelte:head>
 
 <section>
+	{#if Sending}
+		<div class="sending" />
+	{/if}
 	<form bind:this={formData} on:submit|preventDefault={checkValidate} id="form">
 		<h1 class="form_title">Відправка E-mail</h1>
 		<div class="form_item">
@@ -106,15 +101,21 @@
 		--border-button-color: #1150f0;
 	}
 
-	._error {
-		box-shadow: 0 0 20px var(--error-color);
-	}
-
 	.some_error {
 		display: block;
 		color: var(--error-color);
 		font-size: 20px;
 		margin: 10px;
+	}
+
+	.sending {
+		position: absolute;
+		content: '';
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(70, 63, 180, 0.3) url('../static/loading.gif') center / 200px no-repeat;
 	}
 
 	form {
@@ -187,8 +188,6 @@
 		border-color: var(--border-button-color);
 		border-width: 3px;
 		transition: background-color 0.5s;
-		position: relative;
-		top: 0;
 		box-shadow: 0 3px 0 var(--text-color);
 	}
 
@@ -197,7 +196,6 @@
 	}
 
 	button:active {
-		top: 3px;
 		box-shadow: 0 0 0 var(--text-color);
 	}
 </style>
