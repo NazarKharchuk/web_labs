@@ -1,5 +1,3 @@
-console.log('req.body');
-
 import nodemailer from 'nodemailer';
 
 export async function post(req) {
@@ -26,7 +24,6 @@ export async function post(req) {
 	console.log('Message sent: %s', info.messageId);
 
 	console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-	//res.status(200).json(info);
 
-	return { status: '200', body: { cod: 'done' } };
+	return { status: '200', body: { cod: 'done', json: info } };
 }

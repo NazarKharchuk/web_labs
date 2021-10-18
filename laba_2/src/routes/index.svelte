@@ -1,33 +1,71 @@
 <script>
 	let formData;
-	let error;
+	let MesError = 0;
+	let MailError = 0;
 	function checkValidate() {
-		error = formData.Email.value == '';
+		MesError = 0;
+		MailError = 0;
 
-		const ToSend = {
-			FMessage: formData.messege.value,
-			FMail: formData.Email.value
-		};
+		let error = Validator();
+		if (error === 0) {
+			const ToSend = {
+				FMessage: formData.messege.value,
+				FMail: formData.Email.value
+			};
 
-		fetch('/api/server', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(ToSend)
-		})
-			.then((resp) => {
-				if (resp.ok) {
-					alert('Mail sent!');
-					console.log(resp);
+			fetch('/api/server', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(ToSend)
+			})
+				.then((resp) => {
+					if (resp.ok) {
+						alert('Mail sent!');
+						console.log(resp);
+					}
+					return resp.json();
+				})
+				.then((data) => {
+					console.log(data);
+					alert(data.cod);
+				})
+				.catch((e) => alert(e));
+		}
+	}
+
+	function Validator() {
+		let error = 0;
+		let req = document.querySelectorAll('._req');
+		for (let index = 0; index < req.length; index++) {
+			const input = req[index];
+			RemoveError(input);
+			if (input.classList.contains('_gmail')) {
+				if (ValidGmail(input)) {
+					AddError(input);
+					error++;
+					MailError = 1;
 				}
-				return resp.json();
-			})
-			.then((data) => {
-				console.log(data);
-				alert(data.cod);
-			})
-			.catch((e) => alert(e));
+			} else if (input.value == '') {
+				AddError(input);
+				error++;
+				MesError = 1;
+			}
+		}
+		return error;
+	}
+
+	function AddError(input) {
+		input.classList.add('_error');
+	}
+
+	function RemoveError(input) {
+		input.classList.remove('_error');
+	}
+
+	function ValidGmail(input) {
+		return !/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,8})+$/.test(input.value);
 	}
 </script>
 
@@ -41,14 +79,17 @@
 		<div class="form_item">
 			<label for="formMail" class="form_label">Електронна адреса:</label>
 			<input id="formMail" type="text" name="Email" class="form_input _req _gmail" />
-			{#if error}
-				<p>Error:</p>
+			{#if MailError}
+				<div class="some_error"><b>🠕 Invalid email!</b></div>
 			{/if}
 		</div>
 		<div class="form_item">
 			<label for="formMessege" class="form_label">Текст електронного листа:</label>
 
 			<textarea name="messege" id="formMessege" class="form_input _req" />
+			{#if MesError}
+				<div class="some_error"><b>🠕 The field cannot be empty!</b></div>
+			{/if}
 		</div>
 		<button type="submit" class="form_item">Надіслати!</button>
 	</form>
@@ -67,6 +108,13 @@
 
 	._error {
 		box-shadow: 0 0 20px var(--error-color);
+	}
+
+	.some_error {
+		display: block;
+		color: var(--error-color);
+		font-size: 20px;
+		margin: 10px;
 	}
 
 	form {
