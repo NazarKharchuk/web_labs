@@ -2,15 +2,19 @@
 	let formData;
 	let error;
 	function checkValidate() {
-		alert(formData.Email.value);
 		error = formData.Email.value == '';
+
+		const ToSend = {
+			FMessage: formData.messege.value,
+			FMail: formData.Email.value
+		};
 
 		fetch('/api/server', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify(formData.Email.value)
+			body: JSON.stringify(ToSend)
 		})
 			.then((resp) => {
 				if (resp.ok) {
@@ -113,9 +117,6 @@
 		background-color: var(--background-color);
 		color: var(--text-color);
 		height: 100vh;
-		display: flex;
-		justify-content: center;
-		align-items: center;
 	}
 
 	input,
