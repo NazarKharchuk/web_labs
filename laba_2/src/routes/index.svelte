@@ -25,15 +25,17 @@
 			})
 				.then((resp) => {
 					if (resp.ok) {
-						alert('Mail sent!');
+						alert('Повідомлення надіслано!');
 						console.log(resp);
+						formData.reset();
 					}
-					formData.reset();
 					Sending = 0;
 					return resp.json();
 				})
 				.then((data) => {
-					console.log(data);
+					console.log('Cod : ' + data.code);
+					console.log('Status : ' + data.message);
+					alert('Cod :' + data.code + '   Status :' + data.message);
 				})
 				.catch((e) => alert(e));
 		}
@@ -75,7 +77,7 @@
 			<label for="formMail" class="form_label">Електронна адреса:</label>
 			<input id="formMail" type="text" name="Email" class="form_input _req _gmail" />
 			{#if MailError}
-				<div class="some_error"><b>🠕 Invalid email!</b></div>
+				<div class="some_error"><b>🠕 Некоректна email!</b></div>
 			{/if}
 		</div>
 		<div class="form_item">
@@ -83,7 +85,7 @@
 
 			<textarea name="messege" id="formMessege" class="form_input _req" />
 			{#if MesError}
-				<div class="some_error"><b>🠕 The field cannot be empty!</b></div>
+				<div class="some_error"><b>🠕 Повідомлення не може бути пустим!</b></div>
 			{/if}
 		</div>
 		<button type="submit" class="form_item">Надіслати!</button>
