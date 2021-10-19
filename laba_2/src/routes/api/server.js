@@ -34,8 +34,8 @@ export async function post(req) {
 		port: 587,
 		secure: false,
 		auth: {
-			user: 'austin.parker60@ethereal.email',
-			pass: 'MkaKc1C15GzjY2TK5T'
+			user: process.env.MAIL,
+			pass: process.env.PASSWORD
 		}
 	});
 
