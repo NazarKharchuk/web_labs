@@ -2,6 +2,7 @@
   "name": "web_labs",
   "version": "1.0.0",
   "main": "index.js",
+  "workspaces": ["laba_2"],
   "scripts": {
     "prepare": "husky install"
   },
