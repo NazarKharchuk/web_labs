@@ -25,7 +25,6 @@
 			})
 				.then((resp) => {
 					if (resp.ok) {
-						alert('Повідомлення надіслано!');
 						console.log(resp);
 						formData.reset();
 					}
@@ -33,9 +32,9 @@
 					return resp.json();
 				})
 				.then((data) => {
-					console.log('Cod : ' + data.code);
-					console.log('Status : ' + data.message);
-					alert('Cod :' + data.code + '   Status :' + data.message);
+					/*console.log('Cod : ' + data.code);
+					console.log('Status : ' + data.message);*/
+					alert(data.message);
 				})
 				.catch((e) => alert(e));
 		}

@@ -5,16 +5,28 @@ const limiter = rateLimit({
 });
 import sanitizeHtml from 'sanitize-html';
 
+function ValidGmail(input) {
+	return !/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,8})+$/.test(input);
+}
+
 export async function post(req) {
-	console.log('Email: ' + req.body.FMail);
-	console.log('Message: ' + sanitizeHtml(req.body.FMessage));
+	/*console.log('Email: ' + req.body.FMail);
+	console.log('Message: ' + sanitizeHtml(req.body.FMessage));*/
 
 	let ip = req.headers['x-forwarded-for'];
 
 	try {
 		await limiter.check(3, ip);
 	} catch (error) {
-		return { status: '429', body: { code: 429, message: 'Too many requests.' } };
+		return { status: '429', body: { code: 429, message: 'Error: Too many requests.' } };
+	}
+
+	if (req.body.FMessage == '' || req.body.FMail == '') {
+		return { status: '500', body: { code: 500, message: 'Error: Fields must be not empty.' } };
+	}
+
+	if (ValidGmail(req.body.FMail)) {
+		return { status: '500', body: { code: 500, message: 'Error: Invalid mail.' } };
 	}
 
 	const transporter = nodemailer.createTransport({
@@ -40,13 +52,13 @@ export async function post(req) {
 	} catch (error) {
 		return {
 			status: '500',
-			body: { code: 500, message: 'Connecting to mailer failed', json: info }
+			body: { code: 500, message: 'Error: Connecting to mailer failed', json: info }
 		};
 	}
 
-	console.log('Message sent: %s', info.messageId);
+	/*console.log('Message sent: %s', info.messageId);
 
-	console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+	console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));*/
 
-	return { status: '200', body: { code: 200, message: 'done', json: info } };
+	return { status: '200', body: { code: 200, message: 'Success: Mail sent!', json: info } };
 }
