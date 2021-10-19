@@ -13,6 +13,7 @@
 		"slint:fix": "stylelint \"**/*.css\" --fix --ignore-path .gitignore --aei"
 	},
 	"devDependencies": {
+		"@sveltejs/adapter-vercel": "^1.0.0-next.31",
 		"@sveltejs/kit": "next",
 		"eslint": "^7.32.0",
 		"eslint-plugin-sonarjs": "^0.10.0",
