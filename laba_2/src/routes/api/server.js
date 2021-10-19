@@ -43,7 +43,7 @@ export async function post(req) {
 
 	try {
 		info = await transporter.sendMail({
-			from: '<austin.parker60@ethereal.email>',
+			from: process.env.MAIL,
 			to: sanitizeHtml(req.body.FMail),
 			subject: 'Hello ✔',
 			text: sanitizeHtml(req.body.FMessage),
